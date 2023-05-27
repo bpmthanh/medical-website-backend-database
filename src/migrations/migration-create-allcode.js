@@ -1,20 +1,22 @@
+// file này tự động map vào database
+
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Users", {
+    await queryInterface.createTable("Allcode", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      firstName: {
+      key: {
         type: Sequelize.STRING,
       },
-      lastName: {
+      value_en: {
         type: Sequelize.STRING,
       },
-      email: {
+      value_vi: {
         type: Sequelize.STRING,
       },
       createdAt: {
@@ -28,6 +30,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Users");
+    await queryInterface.dropTable("Allcode");
   },
 };
