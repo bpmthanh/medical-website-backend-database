@@ -13,13 +13,11 @@ let createNewUser = (data) => {
         lastName: data.lastName,
         address: data.address,
         phoneNumber: data.phoneNumber,
-        gender: data.gender === '1' ? true : false,
+        gender: data.gender === "1" ? true : false,
         roleId: data.roleId,
       });
-      resolve('Create a new user succeed!')
-    } 
-    
-    catch (e) {
+      resolve("Create a new user succeed!");
+    } catch (e) {
       reject(e);
     }
   });
@@ -36,4 +34,17 @@ let hashUserPassword = (password) => {
   });
 };
 
-module.exports = { createNewUser: createNewUser };
+let getAllUsers = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let users = await db.User.findAll({
+        raw: true,
+      });
+      resolve(users);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+module.exports = { createNewUser: createNewUser, getAllUsers: getAllUsers };
