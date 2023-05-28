@@ -30,25 +30,32 @@
                     <th scope="col">Last name</th>
                     <th scope="col">Address</th>
                     <th scope="col">Phone number</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
-                <% for(var i=0; i < data.length; i++) { %>
+                <% for(var i=0; i < dataTable.length; i++) { %>
                     <tr>
                         <td>
-                            <%= data[i].email %>
+                            <%= dataTable[i].email %>
                         </td>
                         <td>
-                            <%= data[i].firstName %>
+                            <%= dataTable[i].firstName %>
                         </td>
                         <td>
-                            <%= data[i].lastName %>
+                            <%= dataTable[i].lastName %>
                         </td>
                         <td>
-                            <%= data[i].address %>
+                            <%= dataTable[i].address %>
                         </td>
                         <td>
-                            <%= data[i].phoneNumber %>
+                            <%= dataTable[i].phoneNumber %>
+                        </td>
+                        <td>
+                            <button class="bg-success" type="button"><a href="/edit-crud?id=<%= dataTable[i].id%>">Edit</a></button>
+                        </td>
+                        <td>
+                            <button class="bg-danger" type="button"><a>Delete</a></button>
                         </td>
                     </tr>
                     <% } %>
