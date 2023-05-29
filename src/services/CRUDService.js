@@ -52,7 +52,7 @@ let getUserInfoById = (userId) => {
     try {
       let user = await db.User.findOne({
         where: { id: userId },
-        raw: true
+        raw: true,
       });
       if (user) {
         resolve(user);
@@ -85,7 +85,23 @@ let updateUserData = (data) => {
         resolve({});
       }
     } catch (e) {
-      resolve(e);
+      reject(e);
+    }
+  });
+};
+
+let deleteUserById = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        where: { id: userId },
+      });
+      if(user){
+        await user.destroy();
+      }
+      resolve();
+    } catch (e) {
+      reject(e);
     }
   });
 };
@@ -95,4 +111,5 @@ module.exports = {
   getAllUsers: getAllUsers,
   getUserInfoById: getUserInfoById,
   updateUserData: updateUserData,
+  deleteUserById: deleteUserById,
 };
