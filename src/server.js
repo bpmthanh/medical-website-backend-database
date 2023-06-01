@@ -3,9 +3,11 @@ import bodyParser from "body-parser"; //giúp ra lấy được các tham số m
 import configViewEngine from "./config/viewEngine";
 import initWebRoutes from "./route/web";
 import connectDB from "./config/connectDB";
+import cors from "cors"
 require("dotenv").config();
 
 let app = express();
+app.use(cors({ credentials: true, origin: true }));
 
 //config app
 
