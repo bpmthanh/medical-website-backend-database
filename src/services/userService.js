@@ -8,9 +8,9 @@ let handleUserLogin = (email, password) => {
       let isExist = await checkUserEmail(email);
       if (isExist) {
         let user = await db.User.findOne({
-          attributes: ["email","roleId","password"],
+          attributes: ["email", "roleId", "password"],
           where: { email: email },
-          raw: true
+          raw: true,
         });
 
         if (user) {
@@ -53,6 +53,29 @@ let checkUserEmail = (emailData) => {
     }
   });
 };
+
+let getAllUsers = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = "";
+      if (userId == "All") {
+        user = await db.User.findAll({ attributes: { exclude: ["password"] }, raw:true });
+      }
+      if (userId && userId !== "All") {
+        user = await db.User.findOne({
+          where: { id: userId },
+          attributes: { exclude: ["password"] },
+          raw: true,
+        });
+      }
+      resolve(user);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   handleUserLogin: handleUserLogin,
+  getAllUsers: getAllUsers,
 };
