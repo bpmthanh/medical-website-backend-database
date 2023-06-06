@@ -159,6 +159,7 @@ let editUser = (data) => {
         user.lastName = data.lastName;
         user.address = data.address;
         user.phoneNumber = data.phoneNumber;
+        user.email = data.email;
         await user.save();
         resolve({
           errCode: 0,
