@@ -134,8 +134,7 @@ let deleteUser = (userId) => {
           errCode: 1,
           errMessage: "The user is not exist!",
         });
-      }
-      else{
+      } else {
         await user.destroy();
         resolve({
           errCode: 0,
@@ -165,13 +164,29 @@ let editUser = (data) => {
           errCode: 0,
           errMessage: "Ok",
         });
-      } 
-      else {
+      } else {
         resolve({
           errCode: 1,
           errMessage: "The user is not exist!",
         });
       }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllCodeService = (typeInput) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let res = {};
+      let allCode = await db.Allcodes.findAll({
+        where: { type: typeInput },
+      });
+      res.errCode = 0;
+      res.errMessage = "Successfully loaded all";
+      res.data = allCode;
+      resolve(res);
     } catch (e) {
       reject(e);
     }
@@ -185,4 +200,5 @@ module.exports = {
   createNewUser: createNewUser,
   deleteUser: deleteUser,
   editUser: editUser,
+  getAllCodeService: getAllCodeService,
 };
