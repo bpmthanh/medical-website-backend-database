@@ -116,7 +116,7 @@ let createNewUser = (data) => {
         });
         resolve({
           errCode: 0,
-          errMessage: "Ok",
+          errMessage: "Create a new user successfully",
         });
       }
     } catch (e) {
@@ -140,7 +140,7 @@ let deleteUser = (userId) => {
         await user.destroy();
         resolve({
           errCode: 0,
-          errMessage: "Ok",
+          errMessage: "Delete the user successfully",
         });
       }
     } catch (e) {
@@ -152,19 +152,28 @@ let deleteUser = (userId) => {
 let editUser = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      if (!data.id || !data.role || !data.position) {
+        resolve({
+          errCode: 2,
+          errMessage: "Missing required parameters",
+        });
+      }
       let user = await db.User.findOne({
         where: { id: data.id },
       });
       if (user) {
+        user.email = data.email;
         user.firstName = data.firstName;
         user.lastName = data.lastName;
         user.address = data.address;
-        user.phoneNumber = data.phoneNumber;
-        user.email = data.email;
+        user.phoneNumber = data.phone;
+        user.gender = data.gender;
+        user.position = data.position;
+        user.role = data.role;
         await user.save();
         resolve({
           errCode: 0,
-          errMessage: "Ok",
+          errMessage: "Edit the user successfully",
         });
       } else {
         resolve({
