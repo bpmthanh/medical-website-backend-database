@@ -33,8 +33,10 @@ app.use(function (req, res, next) {
 });
 
 //config app
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 configViewEngine(app);
 initWebRoutes(app);
