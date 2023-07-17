@@ -9,11 +9,25 @@ let getTopDoctorHome = (limitData) => {
       let res = {};
       let users = await db.User.findAll({
         limit: limitData,
+        where: { roleId: "R2" },
         order: [["createdAt", "DESC"]],
         attributes: {
           exclude: ["password"],
         },
-        // raw:true
+        include: [
+          {
+            model: db.Allcodes,
+            as: "positionData",
+            attributes: ["value_en", "value_vi"],
+          },
+          {
+            model: db.Allcodes,
+            as: "genderData",
+            attributes: ["value_en", "value_vi"],
+          },
+        ],
+        raw: true,
+        nest: true,
       });
       res.errCode = 0;
       res.errMessage = "Get data successfully!";

@@ -4,7 +4,7 @@ let getTopDoctorHome = async (req, res) => {
   let limit = parseInt(req.query.limit);
   console.log(limit)
   if (!limit) {
-    limit = 10;
+    limit = 100;
   }
   try {
     let responseDoctors = await doctorService.getTopDoctorHome(limit);
