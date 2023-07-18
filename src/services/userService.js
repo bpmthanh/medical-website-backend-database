@@ -140,7 +140,7 @@ let deleteUser = (userId) => {
         await user.destroy();
         resolve({
           errCode: 0,
-          errMessage: "Delete the user successfully",
+          errMessage: "Delete the user successfully!",
         });
       }
     } catch (e) {
