@@ -2,7 +2,7 @@ import doctorService from "../services/doctorService";
 
 let getTopDoctorHome = async (req, res) => {
   let limit = parseInt(req.query.limit);
-  console.log(limit)
+  console.log(limit);
   if (!limit) {
     limit = 100;
   }
