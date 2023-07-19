@@ -106,7 +106,7 @@ let getDetailsDoctorById = (inputId) => {
             id: inputId,
           },
           attributes: {
-            exclude: ["password", "image"],
+            exclude: ["password"],
           },
           include: [
             {
@@ -119,9 +119,12 @@ let getDetailsDoctorById = (inputId) => {
               attributes: ["value_en", "value_vi"],
             },
           ],
-          raw: true,
+          raw: false,
           nest: true,
         });
+        if(data && data.image){
+          data.image = new Buffer(data.image, 'base64').toString('binary');
+        }
         res.errCode = 0;
         res.errMessage = "Get doctor by id successfully!";
         res.data = data;
