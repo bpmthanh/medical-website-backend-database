@@ -8,11 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      //   Markdown.hasMany(models.User, {
-      //     foreignKey: "positionId",
-      //     as: "positionData",
-      //   });
-      //   Markdown.hasMany(models.User, { foreignKey: "gender", as: "genderData" });
+        Markdown.belongsTo(models.User, { foreignKey: "doctorId"});
     }
   }
   Markdown.init(

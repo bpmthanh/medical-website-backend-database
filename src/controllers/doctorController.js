@@ -2,7 +2,6 @@ import doctorService from "../services/doctorService";
 
 let getTopDoctorHome = async (req, res) => {
   let limit = parseInt(req.query.limit);
-  console.log(limit);
   if (!limit) {
     limit = 100;
   }
@@ -44,8 +43,23 @@ let postInfoDoctor = async (req, res) => {
   }
 };
 
+let getDetailsDoctor = async (req, res) => {
+  try {
+    let id = parseInt(req.query.id);
+    let response = await doctorService.getDetailsDoctorById(id);
+    console.log(response)
+    return res.status(200).json(response);
+  } catch (e) {
+    return res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from sever!",
+    });
+  }
+};
+
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
   postInfoDoctor: postInfoDoctor,
+  getDetailsDoctor: getDetailsDoctor,
 };
