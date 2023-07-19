@@ -67,23 +67,45 @@ let saveDetailDoctorInfo = (doctorDataDetail) => {
       if (
         !doctorDataDetail.doctorId ||
         !doctorDataDetail.contentHTML ||
-        !doctorDataDetail.contentMarkdown
+        !doctorDataDetail.contentMarkdown ||
+        !doctorDataDetail.action
       ) {
         resolve({
           errCode: 1,
           errMessage: "Missing parameter!",
         });
       } else {
-        await db.Markdown.create({
-          contentHTML: doctorDataDetail.contentHTML,
-          contentMarkdown: doctorDataDetail.contentMarkdown,
-          description: doctorDataDetail.description,
-          doctorId: doctorDataDetail.doctorId,
-        });
-        resolve({
-          errCode: 0,
-          errMessage: "Save information doctor successfully!",
-        });
+        if (doctorDataDetail.action === "CREATE") {
+          await db.Markdown.create({
+            contentHTML: doctorDataDetail.contentHTML,
+            contentMarkdown: doctorDataDetail.contentMarkdown,
+            description: doctorDataDetail.description,
+            doctorId: doctorDataDetail.doctorId,
+          });
+          resolve({
+            errCode: 0,
+            errMessage: "Create doctor information successfully!",
+          });
+        } else if (doctorDataDetail.action === "EDIT") {
+          let doctorInfo = await db.Markdown.findOne({
+            where: { doctorId: doctorDataDetail.doctorId },
+          });
+          if (doctorInfo) {
+            doctorInfo.contentHTML = doctorDataDetail.contentHTML;
+            doctorInfo.contentMarkdown = doctorDataDetail.contentMarkdown;
+            doctorInfo.description = doctorDataDetail.description;
+            await doctorInfo.save();
+            resolve({
+              errCode: 0,
+              errMessage: "Edit the doctor information successfully",
+            });
+          } else {
+            resolve({
+              errCode: 1,
+              errMessage: "The doctor information is not exist!",
+            });
+          }
+        }
       }
     } catch (e) {
       reject(e);
@@ -111,7 +133,12 @@ let getDetailsDoctorById = (inputId) => {
           include: [
             {
               model: db.Markdown,
-              attributes: ["description", "contentHTML", "contentMarkdown"],
+              attributes: [
+                "description",
+                "contentHTML",
+                "contentMarkdown",
+                "doctorId",
+              ],
             },
             {
               model: db.Allcodes,
@@ -122,8 +149,8 @@ let getDetailsDoctorById = (inputId) => {
           raw: false,
           nest: true,
         });
-        if(data && data.image){
-          data.image = new Buffer(data.image, 'base64').toString('binary');
+        if (data && data.image) {
+          data.image = new Buffer(data.image, "base64").toString("binary");
         }
         res.errCode = 0;
         res.errMessage = "Get doctor by id successfully!";
