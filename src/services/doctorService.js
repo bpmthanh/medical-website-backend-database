@@ -1,6 +1,10 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 const salt = bcrypt.genSaltSync(10);
+require("dotenv").config();
+import _ from "lodash";
+
+const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
 let getTopDoctorHome = (limitData) => {
   return new Promise(async (resolve, reject) => {
@@ -163,9 +167,61 @@ let getDetailsDoctorById = (inputId) => {
   });
 };
 
+let bulkCreateSchedule = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing parameter!",
+        });
+      } else {
+        let schedule;
+        if (data && data.length > 0) {
+          schedule = data.map((item) => {
+            item.maxNumber = MAX_NUMBER_SCHEDULE;
+            return item;
+          });
+        }
+
+        let existingSchedule = await db.Schedule.findAll({
+          where: { doctorId: 67, date: 1689872400000 },
+          attributes: ["timeType", "date", "doctorId", "maxNumber"],
+          raw: true,
+        });
+
+        if (existingSchedule && existingSchedule.length > 0) {
+          existingSchedule = existingSchedule.map((item) => {
+            item.date = new Date(item.date).getTime();
+            return item;
+          });
+        }
+
+        let toCreate = _.differenceWith(schedule, existingSchedule, (a, b) => {
+          return a.timeType === b.timeType && a.date === b.date;
+        });
+
+        if (toCreate && toCreate.length > 0) {
+          await db.Schedule.bulkCreate(toCreate);
+        }
+
+
+        resolve({
+          errCode: 0,
+          errMessage: "Post data successfully!",
+          data: schedule,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
   saveDetailDoctorInfo: saveDetailDoctorInfo,
   getDetailsDoctorById: getDetailsDoctorById,
+  bulkCreateSchedule: bulkCreateSchedule,
 };
