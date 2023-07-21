@@ -177,15 +177,15 @@ let bulkCreateSchedule = (data) => {
         });
       } else {
         let schedule;
-        if (data && data.length > 0) {
-          schedule = data.map((item) => {
+        if (data.arrSchedule && data.arrSchedule.length > 0) {
+          schedule = data.arrSchedule.map((item) => {
             item.maxNumber = MAX_NUMBER_SCHEDULE;
             return item;
           });
         }
 
         let existingSchedule = await db.Schedule.findAll({
-          where: { doctorId: 67, date: 1689872400000 },
+          where: { doctorId: data.doctorId, date: data.date },
           attributes: ["timeType", "date", "doctorId", "maxNumber"],
           raw: true,
         });
