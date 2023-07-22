@@ -167,6 +167,40 @@ let getDetailsDoctorById = (inputId) => {
   });
 };
 
+let getScheduleDoctorByDate = (doctorId, date) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!doctorId || !date) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing parameter!",
+        });
+      } else {
+        let res = {};
+        let data = await db.Schedule.findAll({
+          where: {
+            doctorId,
+            date,
+          },
+        });
+        if (!data) {
+          data = [];
+          res.errCode = -1;
+          res.errMessage = "Can't find doctor's appointment";
+          res.data = data;
+          resolve(res);
+        }
+        res.errCode = 0;
+        res.errMessage = "Get doctor by id successfully!";
+        res.data = data;
+        resolve(res);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 let bulkCreateSchedule = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -205,7 +239,6 @@ let bulkCreateSchedule = (data) => {
           await db.Schedule.bulkCreate(toCreate);
         }
 
-
         resolve({
           errCode: 0,
           errMessage: "Post data successfully!",
@@ -224,4 +257,5 @@ module.exports = {
   saveDetailDoctorInfo: saveDetailDoctorInfo,
   getDetailsDoctorById: getDetailsDoctorById,
   bulkCreateSchedule: bulkCreateSchedule,
+  getScheduleDoctorByDate: getScheduleDoctorByDate,
 };
