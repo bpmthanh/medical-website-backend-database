@@ -167,7 +167,7 @@ let getDetailsDoctorById = (inputId) => {
   });
 };
 
-let getScheduleDoctorByDate = (doctorId, date) => {
+let getScheduleDoctorByDate = (doctorId,date) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!doctorId || !date) {
@@ -182,6 +182,15 @@ let getScheduleDoctorByDate = (doctorId, date) => {
             doctorId,
             date,
           },
+          include: [
+            {
+              model: db.Allcodes,
+              as: "timeTypeData",
+              attributes: ["value_en", "value_vi"],
+            },
+          ],
+          raw: false,
+          nest: true,
         });
         if (!data) {
           data = [];
@@ -224,15 +233,8 @@ let bulkCreateSchedule = (data) => {
           raw: true,
         });
 
-        if (existingSchedule && existingSchedule.length > 0) {
-          existingSchedule = existingSchedule.map((item) => {
-            item.date = new Date(item.date).getTime();
-            return item;
-          });
-        }
-
         let toCreate = _.differenceWith(schedule, existingSchedule, (a, b) => {
-          return a.timeType === b.timeType && a.date === b.date;
+          return a.timeType === b.timeType && +a.date === +b.date;
         });
 
         if (toCreate && toCreate.length > 0) {
