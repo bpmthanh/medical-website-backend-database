@@ -66,13 +66,20 @@ let getAllDoctors = () => {
 };
 
 let saveDetailDoctorInfo = (doctorDataDetail) => {
+  console.log(doctorDataDetail);
   return new Promise(async (resolve, reject) => {
     try {
       if (
         !doctorDataDetail.doctorId ||
         !doctorDataDetail.contentHTML ||
         !doctorDataDetail.contentMarkdown ||
-        !doctorDataDetail.action
+        !doctorDataDetail.action ||
+        !doctorDataDetail.selectedPrice ||
+        !doctorDataDetail.selectedPayment ||
+        !doctorDataDetail.selectedProvince ||
+        !doctorDataDetail.nameClinic ||
+        !doctorDataDetail.addressClinic ||
+        !doctorDataDetail.note
       ) {
         resolve({
           errCode: 1,
@@ -109,6 +116,37 @@ let saveDetailDoctorInfo = (doctorDataDetail) => {
               errMessage: "The doctor information is not exist!",
             });
           }
+        }
+
+        let doctorMoreInfo = await db.Doctor_Infor.findOne({
+          where: { doctorId: doctorDataDetail.doctorId },
+        });
+        if (doctorMoreInfo) {
+          doctorMoreInfo.priceId = doctorDataDetail.selectedPrice;
+          doctorMoreInfo.paymentId = doctorDataDetail.selectedPayment;
+          doctorMoreInfo.provinceId = doctorDataDetail.selectedProvince;
+          doctorMoreInfo.nameClinic = doctorDataDetail.nameClinic;
+          doctorMoreInfo.addressClinic = doctorDataDetail.addressClinic;
+          doctorMoreInfo.note = doctorDataDetail.note;
+          await doctorMoreInfo.save();
+          resolve({
+            errCode: 0,
+            errMessage: "Edit the doctor information successfully",
+          });
+        } else {
+          await db.Doctor_Infor.create({
+            priceId: doctorDataDetail.selectedPrice,
+            paymentId: doctorDataDetail.selectedPayment,
+            provinceId: doctorDataDetail.selectedProvince,
+            nameClinic: doctorDataDetail.nameClinic,
+            addressClinic: doctorDataDetail.addressClinic,
+            note: doctorDataDetail.note,
+            doctorId: doctorDataDetail.doctorId,
+          });
+          resolve({
+            errCode: 0,
+            errMessage: "Create doctor information successfully!",
+          });
         }
       }
     } catch (e) {
@@ -149,6 +187,26 @@ let getDetailsDoctorById = (inputId) => {
               as: "positionData",
               attributes: ["value_en", "value_vi"],
             },
+            {
+              model: db.Doctor_Infor,
+              include: [
+                {
+                  model: db.Allcodes,
+                  as: "provinceTypeData",
+                  attributes: ["value_en", "value_vi", "keyMap"],
+                },
+                {
+                  model: db.Allcodes,
+                  as: "priceTypeData",
+                  attributes: ["value_en", "value_vi", "keyMap"],
+                },
+                {
+                  model: db.Allcodes,
+                  as: "paymentTypeData",
+                  attributes: ["value_en", "value_vi", "keyMap"],
+                },
+              ],
+            },
           ],
           raw: false,
           nest: true,
@@ -167,7 +225,7 @@ let getDetailsDoctorById = (inputId) => {
   });
 };
 
-let getScheduleDoctorByDate = (doctorId,date) => {
+let getScheduleDoctorByDate = (doctorId, date) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!doctorId || !date) {

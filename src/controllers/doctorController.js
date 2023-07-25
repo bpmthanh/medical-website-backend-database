@@ -47,7 +47,7 @@ let getDetailsDoctor = async (req, res) => {
   try {
     let id = parseInt(req.query.id);
     let response = await doctorService.getDetailsDoctorById(id);
-    console.log(response)
+    console.log(response);
     return res.status(200).json(response);
   } catch (e) {
     return res.status(500).json({
