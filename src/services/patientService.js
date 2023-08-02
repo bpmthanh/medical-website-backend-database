@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 
 let buildURLEmail = (doctorId, token) => {
-  let result = `${process.env.REACT_APP_BACKEND_URL}/api/patient-verify-book-appointment?token=${token}&doctorId=${doctorId}`;
+  let result = `${process.env.REACT_APP_FRONTEND_URL}/verify-booking?token=${token}&doctorId=${doctorId}`;
   return result;
 };
 let postBookAppointment = (data) => {

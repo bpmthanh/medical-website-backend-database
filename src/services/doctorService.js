@@ -128,6 +128,7 @@ let saveDetailDoctorInfo = (doctorDataDetail) => {
           doctorMoreInfo.nameClinic = doctorDataDetail.nameClinic;
           doctorMoreInfo.addressClinic = doctorDataDetail.addressClinic;
           doctorMoreInfo.note = doctorDataDetail.note;
+          doctorMoreInfo.specialtyId = doctorDataDetail.specialtyId;
           await doctorMoreInfo.save();
           resolve({
             errCode: 0,
@@ -142,6 +143,7 @@ let saveDetailDoctorInfo = (doctorDataDetail) => {
             addressClinic: doctorDataDetail.addressClinic,
             note: doctorDataDetail.note,
             doctorId: doctorDataDetail.doctorId,
+            specialtyId: doctorDataDetail.specialtyId,
           });
           resolve({
             errCode: 0,
@@ -204,6 +206,10 @@ let getDetailsDoctorById = (inputId) => {
                   model: db.Allcodes,
                   as: "paymentTypeData",
                   attributes: ["value_en", "value_vi", "keyMap"],
+                },
+                {
+                  model: db.Specialty,
+                  as: "specialtyTypeData",
                 },
               ],
             },
@@ -298,7 +304,7 @@ let getInfoDoctorById = (doctorId) => {
               as: "paymentTypeData",
               attributes: ["value_en", "value_vi", "keyMap"],
             },
-          ]
+          ],
         });
         if (!data) {
           data = [];
