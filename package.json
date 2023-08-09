@@ -6,7 +6,9 @@
   "scripts": {
     "test": "npm init",
     "start": "nodemon --exec babel-node src/server.js",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build-src": "babel src -d build --copy-files",
+    "build": "node build/server.js"
   },
   "repository": {
     "type": "git",
