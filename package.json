@@ -1,5 +1,5 @@
 {
-  "name": "medical-website",
+  "name": "medical-website-backend-database",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bpmthanh/medical-website.git"
+    "url": "git+https://github.com/bpmthanh/medical-website-backend-database.git"
   },
   "author": "Bùi Phạm Minh Thành",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bpmthanh/medical-website/issues"
+    "url": "https://github.com/bpmthanh/medical-website-backend-database/issues"
   },
-  "homepage": "https://github.com/bpmthanh/medical-website#readme",
+  "homepage": "https://github.com/bpmthanh/medical-website-backend-database#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
